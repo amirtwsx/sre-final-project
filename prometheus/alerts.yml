@@ -1,0 +1,11 @@
+groups:
+  - name: webapp_down
+    rules:
+      - alert: WebappDown
+        expr: up{job="nginx-app"} == 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Webapp is down"
+          description: "Webapp (nginx) has been unreachable for 10 seconds"
