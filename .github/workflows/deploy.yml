@@ -9,16 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Клонирование репозитория
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Установка Docker и Compose
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Login to DockerHub (опционально)
+        run: echo "пропущено"
+
+      - name: Build and run containers
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io docker-compose
-
-      - name: Сборка контейнеров
-        run: docker-compose build
-
-      - name: Запуск контейнеров
-        run: docker-compose up -d
+          docker compose version || curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+          docker compose -f docker-compose.yml up -d --build
