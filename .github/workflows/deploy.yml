@@ -7,21 +7,19 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Login to DockerHub (опционально)
-        run: echo "пропущено"
-
-      - name: Build and run containers
+      - name: Install Docker
         run: |
-          docker compose version || curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-          docker compose -f docker-compose.yml up -d --build
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+
+      - name: Check Docker version
+        run: docker --version
+
+      - name: Build & Run
+        run: |
+          sudo docker compose version || sudo docker-compose version
+          sudo docker-compose up -d --build
